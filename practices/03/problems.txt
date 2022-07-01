@@ -1,0 +1,6 @@
+1. Calculate total orders amount : 150
+2. Calculate total paid amount : 130
+3. Calculate total due amount : 20
+4. Calculate total orders count : 2
+5. Calculate averge order amount : 75
+6. Calculate item wise total sale  Bread : 100, Rice: 50
