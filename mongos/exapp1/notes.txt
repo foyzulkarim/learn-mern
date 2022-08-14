@@ -1,0 +1,17 @@
+express api 
+
+localhost:4000/api/students/
+
+  - get detail of a student: /detail/:id
+  - create a student: /create
+  - search students: /search
+  - update a student: /update:id
+  - delete a student: /delete:id
+
+
+alternative approach (HTTP Verb)
+- POST 
+- GET
+- DELETE 
+- PUT
+
