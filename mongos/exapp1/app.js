@@ -1,21 +1,25 @@
 const express = require("express");
 const app = express();
 
+const { insert, search } = require("./students.service");
+
 app.use(express.json());
 
-app.get("/api/students/detail:id", (req, res) => {
+app.get("/api/students/detail/:id", async (req, res) => {
   console.log("GET /api/students", req.query);
-  res.send("Hello World");
+  res.send(`Hello world`);
 });
 
-app.post("/api/students/search", (req, res) => {
+app.post("/api/students/search", async (req, res) => {
   console.log("POST /api/students", req.body);
-  res.send("Hello World");
+  const result = await search(req.body);
+  res.send(result);
 });
 
-app.post("/api/studets/create", (req, res) => {
+app.post("/api/students/create", async (req, res) => {
   console.log("POST /api/students/create", req.body);
-  res.send("Hello World");
+  const result = await insert(req.body);
+  res.send(result);
 });
 
 app.put("/api/students/update/:id", (req, res) => {
