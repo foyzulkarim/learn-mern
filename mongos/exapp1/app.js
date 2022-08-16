@@ -1,11 +1,16 @@
 const express = require("express");
 const app = express();
+const { getDb } = require("./mongo");
 
 app.use(express.json());
 
-app.get("/api/students/detail:id", (req, res) => {
+app.get("/api/students/detail/:id", async (req, res) => {
   console.log("GET /api/students", req.query);
-  res.send("Hello World");
+  const db = await getDb();
+  const collection = db.collection("students");
+  const students = await collection.find().toArray();
+
+  res.send(students);
 });
 
 app.post("/api/students/search", (req, res) => {
