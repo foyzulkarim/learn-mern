@@ -1,35 +1,42 @@
-const { getDb } = require("./mongo");
+const { ObjectId } = require("mongodb");
+const { getDb, getCollections } = require("./mongo");
 
 const insert = async (document) => {
-  const db = await getDb();
-  const collection = db.collection("students");
-  const result = await collection.insertOne(document);
+  const result = await getCollections().Student.insertOne(document);
   return result;
 };
 
 const search = async (searchObject) => {
-  const db = await getDb();
-  const collection = await db.collection("students");
-  const result = await collection.find(searchObject).toArray();
+  const result = await getCollections().Student.find(searchObject).toArray();
   return result;
 };
 
 const getById = async (id) => {
-  const db = await getDb();
-  const collection = db.collection("students");
+  const student = await getCollections().Student.findOne({
+    _id: new ObjectId(id),
+  });
+  return student;
 };
 
 const update = async (id, document) => {
-  const db = await getDb();
-  const collection = db.collection("students");
+  const updatedDoc = await getCollections().Student.updateOne(
+    { _id: new ObjectId(id) },
+    { $set: { ...document } }
+  );
+  return updatedDoc;
 };
 
 const deleteById = async (id) => {
-  const db = await getDb();
-  const collection = db.collection("students");
+  const deleted = await getCollections().Student.deleteOne({
+    _id: new ObjectId(id),
+  });
+  return deleted;
 };
 
 module.exports = {
   insert,
   search,
+  getById,
+  update,
+  deleteById,
 };

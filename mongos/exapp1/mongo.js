@@ -20,8 +20,16 @@ const getDb = async () => {
   return _db;
 };
 
+const getCollections = () => {
+  return {
+    Student: _db.collection("students"),
+    Teacher: _db.collection("teachers"),
+  };
+};
+
 // export them
 module.exports = {
   connect,
   getDb,
+  getCollections,
 };

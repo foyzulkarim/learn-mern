@@ -1,13 +1,20 @@
 const express = require("express");
 const app = express();
 
-const { insert, search } = require("./students.service");
+const {
+  insert,
+  search,
+  getById,
+  update,
+  deleteById,
+} = require("./students.service");
 
 app.use(express.json());
 
 app.get("/api/students/detail/:id", async (req, res) => {
-  console.log("GET /api/students", req.query);
-  res.send(`Hello world`);
+  console.log("GET /api/students", req.params);
+  const student = await getById(req.params.id);
+  res.send(student);
 });
 
 app.post("/api/students/search", async (req, res) => {
@@ -22,14 +29,18 @@ app.post("/api/students/create", async (req, res) => {
   res.send(result);
 });
 
-app.put("/api/students/update/:id", (req, res) => {
+app.put("/api/students/update/:id", async (req, res) => {
   console.log("PUT /api/students/:id", req.params.id);
-  res.send("Hello World");
+  const updated = await update(req.params.id, req.body);
+  res.send(updated);
+  // console.log("req", req.body);
+  // res.send("thank you");
 });
 
-app.delete("/api/students/delete/:id", (req, res) => {
+app.delete("/api/students/delete/:id", async (req, res) => {
   console.log("DELETE /api/students/:id", req.params.id);
-  res.send("Hello World");
+  const result = await deleteById(req.params.id);
+  res.send(result);
 });
 
 // which request, what handler
