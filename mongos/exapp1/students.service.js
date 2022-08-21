@@ -1,4 +1,4 @@
-const { getDb } = require("./mongo");
+const { getDb, getCollections } = require("./mongo");
 
 const insert = async (document) => {
   const db = await getDb();
@@ -8,9 +8,8 @@ const insert = async (document) => {
 };
 
 const search = async (searchObject) => {
-  const db = await getDb();
-  const collection = await db.collection("students");
-  const result = await collection.find(searchObject).toArray();
+  const { Student } = getCollections();
+  const result = await Student.find(searchObject).toArray();
   return result;
 };
 
