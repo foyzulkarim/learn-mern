@@ -47,21 +47,20 @@ const connect = async () => {
   console.log("connecting to MongoDB");
   await client.connect();
   _db = client.db("schooldb");
-  createCollections(_db);
+  //createCollections(_db);
 };
 
 // create a getdb
-const getDb = async () => {
-  if (!_db) {
-    await connect();
-  }
+const getDb = () => {
+  // if (!_db) {
+  //   await connect();
+  // }
   return _db;
 };
 
 const getCollections = () => {
   return {
-    Student: _db.collection("students"),
-    Teacher: _db.collection("teachers"),
+    Student: _db?.collection("students"),
   };
 };
 
