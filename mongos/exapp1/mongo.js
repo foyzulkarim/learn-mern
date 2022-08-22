@@ -13,23 +13,12 @@ const connect = async () => {
 };
 
 // create a getdb
-const getDb = async () => {
-  if (!_db) {
-    await connect();
-  }
+const getDb = () => {
   return _db;
-};
-
-const getCollections = () => {
-  return {
-    Student: _db.collection("students"),
-    Teacher: _db.collection("teachers"),
-  };
 };
 
 // export them
 module.exports = {
   connect,
   getDb,
-  getCollections,
 };
