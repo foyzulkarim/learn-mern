@@ -2,8 +2,25 @@ const { ObjectId } = require("mongodb");
 const { getDb, getCollections } = require("./mongo");
 
 const insert = async (document) => {
-  const result = await getCollections().Student.insertOne(document);
-  return result;
+  try {
+    const result = await getCollections().Student.insertOne(document);
+    return result;
+  } catch (error) {
+    console.log(JSON.stringify(error));
+    if (error.code == 121) {
+      const errors = error.errInfo.details.schemaRulesNotSatisfied
+        .map((e) =>
+          e.propertiesNotSatisfied.map((p) => ({
+            property: p.propertyName,
+            errors: p.details.map((q) => q.reason),
+          }))
+        )
+        .flatMap((x) => x);
+      console.log("errors: ", errors);
+      return new Error(JSON.stringify({ message: error.message, errors }));
+    }
+    return new Error(error.message);
+  }
 };
 
 const search = async (searchObject) => {

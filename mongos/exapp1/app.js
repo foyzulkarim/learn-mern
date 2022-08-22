@@ -26,7 +26,12 @@ app.post("/api/students/search", async (req, res) => {
 app.post("/api/students/create", async (req, res) => {
   console.log("POST /api/students/create", req.body);
   const result = await insert(req.body);
-  res.send(result);
+  if (result instanceof Error) {
+    console.log(result.message);
+    res.status(400).json(JSON.parse(result.message));
+    return;
+  }
+  res.json(result);
 });
 
 app.put("/api/students/update/:id", async (req, res) => {

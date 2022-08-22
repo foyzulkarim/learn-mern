@@ -11,40 +11,25 @@ const createCollections = async (db) => {
       validator: {
         $jsonSchema: {
           bsonType: "object",
-          required: ["name", "year", "major", "address"],
+          required: ["name", "phone", "age", "city"],
           properties: {
             name: {
               bsonType: "string",
               description: "must be a string and is required",
             },
-            year: {
+            phone: {
+              bsonType: ["string"],
+              description: "must be a string and is required",
+            },
+            age: {
               bsonType: "int",
-              minimum: 2017,
-              maximum: 3017,
-              description:
-                "must be an integer in [ 2017, 3017 ] and is required",
+              minimum: 0,
+              maximum: 200,
+              description: "must be an integer in [ 0, 200 ] and is required",
             },
-            major: {
-              enum: ["Math", "English", "Computer Science", "History", null],
+            city: {
+              enum: ["Dhaka", "Chittagong", "Rajshahi", "Khulna", "Sylhet"],
               description: "can only be one of the enum values and is required",
-            },
-            gpa: {
-              bsonType: ["double"],
-              description: "must be a double if the field exists",
-            },
-            address: {
-              bsonType: "object",
-              required: ["city"],
-              properties: {
-                street: {
-                  bsonType: "string",
-                  description: "must be a string if the field exists",
-                },
-                city: {
-                  bsonType: "string",
-                  description: "must be a string and is required",
-                },
-              },
             },
           },
         },
