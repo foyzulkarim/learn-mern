@@ -13,10 +13,10 @@ const connect = async () => {
 };
 
 // create a getdb
-const getDb = async () => {
-  if (!_db) {
-    await connect();
-  }
+const getDb = () => {
+  // if (!_db) {
+  //   await connect();
+  // }
   return _db;
 };
 

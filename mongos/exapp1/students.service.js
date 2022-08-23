@@ -1,13 +1,37 @@
 const { ObjectId } = require("mongodb");
 const { getDb, getCollections } = require("./mongo");
+const { Student } = require("./student.model");
 
 const insert = async (document) => {
-  const result = await getCollections().Student.insertOne(document);
-  return result;
+  try {
+    const result = await Student.insertOne(document);
+    return result;
+  } catch (error) {
+    if (error.code === 121) {
+      console.log(
+        JSON.stringify(
+          error.errInfo.details.schemaRulesNotSatisfied.find(
+            (x) => x.operatorName == "properties"
+          ).propertiesNotSatisfied
+        )
+      );
+      const errors = error.errInfo.details.schemaRulesNotSatisfied.find(
+        (x) => x.operatorName == "properties"
+      ).propertiesNotSatisfied;
+      const reasons = errors.map((e) => {
+        return {
+          property: e.propertyName,
+          errors: e.details.map((d) => d.reason),
+        };
+      });
+      return new Error(JSON.stringify(reasons));
+    }
+    return error;
+  }
 };
 
 const search = async (searchObject) => {
-  const result = await getCollections().Student.find(searchObject).toArray();
+  const result = await Student.find(searchObject).toArray();
   return result;
 };
 
