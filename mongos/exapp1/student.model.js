@@ -1,4 +1,5 @@
 const { getDb } = require("./mongo");
+const { BANGLADESH_CITIES } = require("./constant");
 
 const getCollection = () => {
   console.log(`creating student collection`);
@@ -24,7 +25,7 @@ const getCollection = () => {
             description: "must be an integer in [ 0, 200 ] and is required",
           },
           city: {
-            enum: ["Dhaka", "Chittagong", "Rajshahi", "Khulna", "Sylhet"],
+            enum: BANGLADESH_CITIES,
             description: "can only be one of the enum values and is required",
           },
         },

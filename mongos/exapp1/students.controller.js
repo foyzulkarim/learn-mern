@@ -5,6 +5,7 @@ const {
   update,
   deleteById,
 } = require("./students.service");
+const { validate } = require("./student.request");
 
 const setupRoutes = (app) => {
   console.log(`setting up student routes`);
@@ -22,12 +23,18 @@ const setupRoutes = (app) => {
 
   app.post("/api/students/create", async (req, res) => {
     console.log("POST /api/students/create", req.body);
-    const result = await insert(req.body);
-    if (result instanceof Error) {
-      res.status(400).json(JSON.parse(result.message));
-      return;
+    const validationResult = validate(req.body);
+    if (!validationResult.error) {
+      const result = await insert(req.body);
+      if (result instanceof Error) {
+        res.status(400).json(JSON.parse(result.message));
+        return;
+      }
+      return res.json(result);
     }
-    res.json(result);
+    return res
+      .status(400)
+      .json({ status: "error", message: validationResult.error });
   });
 
   app.put("/api/students/update/:id", async (req, res) => {
