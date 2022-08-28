@@ -6,6 +6,8 @@ const {
   deleteById,
 } = require("./students.service");
 
+const { validate } = require("./student.request");
+
 const setupRoutes = (app) => {
   console.log(`setting up student routes`);
   app.get("/api/students/detail/:id", async (req, res) => {
@@ -22,12 +24,17 @@ const setupRoutes = (app) => {
 
   app.post("/api/students/create", async (req, res) => {
     console.log("POST /api/students/create", req.body);
-    const result = await insert(req.body);
-    if (result instanceof Error) {
-      res.status(400).json(JSON.parse(result.message));
-      return;
+    const validated = validate(req.body);
+    const isValid = validated.error === null;
+    if (isValid) {
+      const result = await insert(req.body);
+      if (result instanceof Error) {
+        res.status(400).json(JSON.parse(result.message));
+        return;
+      }
+      res.json(result);
     }
-    res.json(result);
+    return res.status(400).json({ status: "error", message: validated.error });
   });
 
   app.put("/api/students/update/:id", async (req, res) => {
