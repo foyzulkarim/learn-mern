@@ -1,5 +1,5 @@
 const { ObjectId } = require("mongodb");
-const { getDb, getCollections } = require("./mongo");
+const { getCollections } = require("./mongo");
 const { Student } = require("./student.model");
 
 const insert = async (document) => {
