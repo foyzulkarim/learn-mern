@@ -1,3 +1,4 @@
+const { validatorMiddleware } = require("./middlewares");
 const {
   insert,
   search,
@@ -21,42 +22,35 @@ const setupRoutes = (app) => {
     res.send(result);
   });
 
-  const validatorMiddleware = (x) => {
-    return (req, res, next) => {
-      const validationResult = x(req.body);
-      if (!validationResult.error) {
-        next();
-        return;
-      }
-      return res
-        .status(400)
-        .json({ status: "error", message: validationResult.error });
-    };
-  };
-
   app.post(
     "/api/students/create",
     validatorMiddleware(validateCreate),
     async (req, res) => {
       console.log("POST /api/students/create", req.body);
-      const result = await insert(req.body);
-      if (result instanceof Error) {
-        res.status(400).json(JSON.parse(result.message));
-        return;
+      try {
+        const result = await insert(req.body);
+        if (result instanceof Error) {
+          next(result, req, res);
+          return;
+        }
+        return res.json(result);
+      } catch (error) {
+        next(error, req, res);
       }
-      return res.json(result);
     }
   );
 
   app.put(
     "/api/students/update/:id",
     validatorMiddleware(validateUpdate),
-    async (req, res) => {
+    async (req, res, next) => {
       console.log("PUT /api/students/:id", req.params.id);
-      const updated = await update(req.params.id, req.body);
-      res.send(updated);
-      // console.log("req", req.body);
-      // res.send("thank you");
+      try {
+        const updated = await update(req.params.id, req.body);
+        res.send(updated);
+      } catch (error) {
+        next(error, req, res, next);
+      }
     }
   );
 

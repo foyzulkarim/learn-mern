@@ -1,5 +1,6 @@
 const app = require("./app");
 const { connect } = require("./mongo");
+const { handleError } = require("./middlewares");
 
 const PORT = 4000;
 
@@ -12,6 +13,9 @@ app.listen(PORT, async () => {
   console.log(`listening on port ${PORT}`);
   await connect();
   setup();
+  app.use(async (err, req, res, next) => {
+    await handleError(err, req, res, next);
+  });
   // which request, what handler
   app.use("/", (req, res) => {
     console.log(`request received at ${new Date()}`);
