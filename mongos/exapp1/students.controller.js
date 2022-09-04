@@ -5,7 +5,7 @@ const {
   update,
   deleteById,
 } = require("./students.service");
-const { validate } = require("./student.request");
+const { validateCreate, validateUpdate } = require("./student.request");
 
 const setupRoutes = (app) => {
   console.log(`setting up student routes`);
@@ -21,10 +21,24 @@ const setupRoutes = (app) => {
     res.send(result);
   });
 
-  app.post("/api/students/create", async (req, res) => {
-    console.log("POST /api/students/create", req.body);
-    const validationResult = validate(req.body);
-    if (!validationResult.error) {
+  const validatorMiddleware = (x) => {
+    return (req, res, next) => {
+      const validationResult = x(req.body);
+      if (!validationResult.error) {
+        next();
+        return;
+      }
+      return res
+        .status(400)
+        .json({ status: "error", message: validationResult.error });
+    };
+  };
+
+  app.post(
+    "/api/students/create",
+    validatorMiddleware(validateCreate),
+    async (req, res) => {
+      console.log("POST /api/students/create", req.body);
       const result = await insert(req.body);
       if (result instanceof Error) {
         res.status(400).json(JSON.parse(result.message));
@@ -32,18 +46,19 @@ const setupRoutes = (app) => {
       }
       return res.json(result);
     }
-    return res
-      .status(400)
-      .json({ status: "error", message: validationResult.error });
-  });
+  );
 
-  app.put("/api/students/update/:id", async (req, res) => {
-    console.log("PUT /api/students/:id", req.params.id);
-    const updated = await update(req.params.id, req.body);
-    res.send(updated);
-    // console.log("req", req.body);
-    // res.send("thank you");
-  });
+  app.put(
+    "/api/students/update/:id",
+    validatorMiddleware(validateUpdate),
+    async (req, res) => {
+      console.log("PUT /api/students/:id", req.params.id);
+      const updated = await update(req.params.id, req.body);
+      res.send(updated);
+      // console.log("req", req.body);
+      // res.send("thank you");
+    }
+  );
 
   app.delete("/api/students/delete/:id", async (req, res) => {
     console.log("DELETE /api/students/:id", req.params.id);

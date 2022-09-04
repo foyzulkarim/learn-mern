@@ -42,8 +42,8 @@ const getById = async (id) => {
   return student;
 };
 
-const update = async (id, document) => {
-  const updatedDoc = await getCollections().Student.updateOne(
+const update = async (id, { _id, ...document }) => {
+  const updatedDoc = await Student.updateOne(
     { _id: new ObjectId(id) },
     { $set: { ...document } }
   );
