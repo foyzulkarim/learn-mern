@@ -1,6 +1,7 @@
 const { ObjectId } = require("mongodb");
-const { getCollections } = require("./mongo");
 const { Student } = require("./student.model");
+
+// TODO: add logging
 
 const insert = async (document) => {
   try {
@@ -30,31 +31,47 @@ const insert = async (document) => {
   }
 };
 
+// TODO: use regex or like search
 const search = async (searchObject) => {
   const result = await Student.find(searchObject).toArray();
   return result;
 };
 
 const getById = async (id) => {
-  const student = await getCollections().Student.findOne({
-    _id: new ObjectId(id),
-  });
-  return student;
+  try {
+    const student = await Student.findOne({
+      _id: new ObjectId(id),
+    });
+    return student;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
 };
 
 const update = async (id, document) => {
-  const updatedDoc = await getCollections().Student.updateOne(
-    { _id: new ObjectId(id) },
-    { $set: { ...document } }
-  );
-  return updatedDoc;
+  try {
+    const updatedDoc = await Student.updateOne(
+      { _id: new ObjectId(id) },
+      { $set: { ...document } }
+    );
+    return updatedDoc;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
 };
 
 const deleteById = async (id) => {
-  const deleted = await getCollections().Student.deleteOne({
-    _id: new ObjectId(id),
-  });
-  return deleted;
+  try {
+    const deleted = await Student.deleteOne({
+      _id: new ObjectId(id),
+    });
+    return deleted;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
 };
 
 module.exports = {
