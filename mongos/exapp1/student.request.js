@@ -12,6 +12,7 @@ const schema = Joi.object().keys({
 const validate = (data) => {
   const validationResult = schema.validate(data);
   console.log("validate: ", validationResult);
+  // return true;
   return validationResult;
 };
 

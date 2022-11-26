@@ -4,6 +4,7 @@ const BANGLADESH_CITIES = [
   "Rajshahi",
   "Khulna",
   "Sylhet",
+  "Gazipur",
 ];
 
 module.exports = {
