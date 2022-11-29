@@ -22,7 +22,9 @@ const insert = async (document) => {
       const reasons = errors.map((e) => {
         return {
           property: e.propertyName,
+          description: e.description,
           errors: e.details.map((d) => d.reason),
+          rawErrors: e.details,
         };
       });
       return new Error(JSON.stringify(reasons));
