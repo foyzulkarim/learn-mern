@@ -8,26 +8,23 @@ const insert = async (document) => {
     const result = await Student.insertOne(document);
     return result;
   } catch (error) {
+    console.error(error);
     if (error.code === 121) {
-      console.log(
-        JSON.stringify(
-          error.errInfo.details.schemaRulesNotSatisfied.find(
-            (x) => x.operatorName == "properties"
-          ).propertiesNotSatisfied
-        )
-      );
+      console.log(JSON.stringify(error));
       const errors = error.errInfo.details.schemaRulesNotSatisfied.find(
         (x) => x.operatorName == "properties"
       ).propertiesNotSatisfied;
       const reasons = errors.map((e) => {
         return {
           property: e.propertyName,
+          description: e.description,
           errors: e.details.map((d) => d.reason),
+          rawErrors: e.details,
         };
       });
       return new Error(JSON.stringify(reasons));
     }
-    return error;
+    return new Error(JSON.stringify(error));
   }
 };
 
