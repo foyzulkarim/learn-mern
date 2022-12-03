@@ -31,16 +31,34 @@ const updateSchema = async (db) => {
   const collections = await db.listCollections({ name: "students" }).toArray();
   if (collections.length === 0) {
     console.log("creating students");
-    db.createCollection("students", { validator });
+    await db.createCollection("students", { validator });
   } else {
     console.log("updating students");
-    db.command({
+    await db.command({
       collMod: "students",
       validator,
     });
   }
+  await db.command({
+    createIndexes: "students",
+    indexes: [
+      {
+        key: { name: -1 },
+        name: "custom_name_index",
+      },
+      {
+        key: { name: "text" },
+        name: "name_text_index",
+      },
+      {
+        key: { phone: 1 },
+        name: "custom_phone_index",
+        unique: true,
+      },
+    ],
+  });
 };
 
 module.exports = {
-  updateSchema
-}
+  updateSchema,
+};
