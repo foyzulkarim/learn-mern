@@ -15,3 +15,17 @@ alternative approach (HTTP Verb)
 - DELETE 
 - PUT
 
+
+
+{ city: "Dhaka", phone: /999/ , $text: { $search: "Van" } }
+
+{city: "Dhaka", phone: /999/i,  $text: { $search: "turner" } }
+
+{ $text: { $search: "turner" }, city: "Dhaka", phone: /999/i }
+
+
+full text search: $text: { $search: "" }
+
+https://www.mongodb.com/docs/manual/reference/command/collMod/#options
+
+https://www.mongodb.com/docs/manual/reference/command/createIndexes/
