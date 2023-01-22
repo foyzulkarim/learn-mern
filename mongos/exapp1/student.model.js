@@ -1,4 +1,4 @@
-const { getDb } = require("./mongo");
+const { getDb } = require("./db");
 
 const getCollection = () => {
   console.log(`get student collection`);

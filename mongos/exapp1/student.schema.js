@@ -53,7 +53,7 @@ const updateSchema = async (db) => {
       {
         key: { phone: 1 },
         name: "custom_phone_index",
-        unique: true,
+        // unique: true,
       },
     ],
   });

@@ -4,7 +4,7 @@ const {
   getById,
   update,
   deleteById,
-} = require("./students.service");
+} = require("./student.service");
 const { validate } = require("./student.request");
 
 const setupRoutes = (app) => {
@@ -12,6 +12,7 @@ const setupRoutes = (app) => {
   app.get("/api/students/detail/:id", async (req, res) => {
     console.log("GET /api/students", req.params);
     const student = await getById(req.params.id);
+    console.log("result student", student);
     res.send(student);
   });
 

@@ -41,9 +41,11 @@ const search = async (searchObject) => {
 
 const getById = async (id) => {
   try {
+    console.log("getById", id);
     const student = await Student.findOne({
       _id: new ObjectId(id),
     });
+    console.log("getById student", student);
     return student;
   } catch (error) {
     console.error(error);
